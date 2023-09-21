@@ -1,5 +1,5 @@
 import React from 'react';
-import JournalGallery from '../../components/journal-cover/JournalGallery';
+import JournalGallery from '../../components/journal-gallery/JournalGallery';
 
 const MyJournals = () => {
   return (

@@ -9,12 +9,11 @@
   flex-direction: column;
   align-items: center;
   width: 150px;
-
+  
 }
 
 .journal-cover {
   width: 100px;
   height: 150px;
-  background-color: black;
   border-radius: 5px;
 }
