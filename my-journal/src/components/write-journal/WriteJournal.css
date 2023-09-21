@@ -1,0 +1,34 @@
+.write-journal {
+  background-color: rgb(236, 231, 231);  
+  height: 160px;
+  width: 100%;
+  padding: 15px;
+  border-radius: 5px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.journal-text {
+  /* TODO: add a notepad img and adjust line height textarea etc */
+  width: 80%;
+  height: 130px;
+  line-height: 30px;
+  resize: none;
+  border: none;
+}
+
+.mood-dropdown {
+  width: 150px;
+}
+
+.favorite-icon {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+}
+
+.bottom-flex-write-journal {
+  display: flex;
+  justify-content: space-between;
+}

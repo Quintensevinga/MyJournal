@@ -1,0 +1,13 @@
+.read-journal {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: rgb(236, 231, 231);
+  height: 140px;
+  width: 100%;
+  border-radius: 5px;
+  position: relative;
+  padding-top: 15px;
+  margin-bottom: 10px;
+}
+

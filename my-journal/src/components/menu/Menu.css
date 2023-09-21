@@ -1,0 +1,22 @@
+.menu {
+  position: fixed;
+  width: 150px;
+  margin-top: 54px;
+  height: 100vh;
+  background-color: rgb(236, 231, 231);
+  display: flex;
+  justify-content: center;
+  box-shadow: 2px 0px 2px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.menuList {
+  list-style-type: none;
+  padding: 0;
+  padding-top: 5px;
+  margin: 0;
+}
+
+.menuList li {
+  margin-bottom: 5px;
+}
