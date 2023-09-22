@@ -1,0 +1,77 @@
+.journal-page-header {
+  display: flex;
+  align-items: center;
+  height: 225px;
+  margin-bottom: 10px;
+}
+.cover {
+  margin-right: 50px;
+  min-width: 150px;
+  height: 190px;
+  background-color: red;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.book-title {
+  padding-bottom: 70px;
+  text-align: center;
+}
+
+.write-journal {
+  background-color: rgb(236, 231, 231);
+  height: 160px;
+  width: 900px;
+  padding: 15px;
+  border-radius: 5px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.read-journal {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: rgb(236, 231, 231);
+  height: 140px;
+  width: 100%;
+  border-radius: 5px;
+  position: relative;
+  padding-top: 15px;
+  margin-bottom: 10px;
+}
+
+.journal-text {
+  /* TODO: add a notepad img and adjust line height textarea etc */
+  width: 80%;
+  height: 130px;
+  line-height: 30px;
+  resize: none;
+  border: none;
+}
+
+.mood-dropdown {
+  width: 150px;
+}
+.favorite-icon {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+    font-size: 20px;
+  color: white;
+  /* Initial color for the heart icon (white) */
+  cursor: pointer;
+  /* Add a pointer cursor to indicate clickability */
+}
+
+.favorite-icon.red-heart {
+  color: red;
+  /* Color for the heart icon when marked as a favorite (red) */
+}
+.bottom-flex-write-journal {
+  display: flex;
+  justify-content: space-between;
+}

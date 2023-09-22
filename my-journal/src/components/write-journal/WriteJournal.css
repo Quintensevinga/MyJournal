@@ -1,7 +1,7 @@
 .write-journal {
   background-color: rgb(236, 231, 231);  
   height: 160px;
-  width: 100%;
+  width: 900px;
   padding: 15px;
   border-radius: 5px;
   position: relative;
@@ -26,6 +26,7 @@
   position: absolute;
   top: 2px;
   right: 2px;
+  font-size: 20px;
 }
 
 .bottom-flex-write-journal {
