@@ -42,6 +42,8 @@
   position: relative;
   padding-top: 15px;
   margin-bottom: 10px;
+
+  
 }
 
 .journal-text {
@@ -60,18 +62,30 @@
   position: absolute;
   top: 2px;
   right: 2px;
-    font-size: 20px;
+  font-size: 20px;
   color: white;
-  /* Initial color for the heart icon (white) */
   cursor: pointer;
-  /* Add a pointer cursor to indicate clickability */
 }
 
 .favorite-icon.red-heart {
   color: red;
-  /* Color for the heart icon when marked as a favorite (red) */
 }
 .bottom-flex-write-journal {
   display: flex;
   justify-content: space-between;
+}
+
+.trash-icon {
+   display: none;
+   position: absolute;
+   right: 10px;
+   bottom: 10px;
+}
+  
+.read-journal:hover .trash-icon {
+  display: block;
+}
+
+.trash-icon:hover {
+  cursor: pointer;
 }

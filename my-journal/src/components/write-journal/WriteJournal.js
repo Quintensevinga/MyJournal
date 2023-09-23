@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import apiService from '../../apiService';
 import './WriteJournal.css'
@@ -6,13 +6,15 @@ import { useJournalContext } from '../../context';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 
-
-const WriteJournal = () => {
+const WriteJournal = ({ isDashboard, journals, setEntries }) => {
   const { updateJournalData } = useJournalContext();
 
-  const [journalEntry, setJournalEntry] = useState('');
+  const [content, setContent] = useState('');
   const [mood, setMood] = useState('');
   const [favorite, setFavorite] = useState(false);
+
+  const [selectedJournal, setSelectedJournal] = useState('');
+
   const params = useParams();
   const journalId = params.journalId;
 
@@ -21,16 +23,16 @@ const WriteJournal = () => {
     try {
       const newEntry = {
         created: Date.now(),
-        content: journalEntry,
+        content: content,
         mood,
         favorite,
       };
-
-      const response = await apiService.addJournalEntry(journalId, newEntry);
-      console.log(response)
+      const response = await apiService.addJournalEntry(selectedJournal || journalId, newEntry);
       updateJournalData(response);
-      setJournalEntry('');
+      setEntries(response.entries);
+      setContent('');
       setMood('');
+      setFavorite(false);
     } catch (error) {
       console.error('Error:', error);
     }
@@ -45,16 +47,14 @@ const WriteJournal = () => {
       <form onSubmit={handleSubmit}>
         <textarea
           className="journal-text"
-          name="journalEntry" 
+          name="journalEntry"
           placeholder="Hey Quinten what's on your mind? Type it here... "
-          value={journalEntry}
-          onChange={((e) => setJournalEntry(e.target.value))}
+          value={content}
+          onChange={((e) => setContent(e.target.value))}
         ></textarea>
-        
         <div className={`favorite-icon ${favorite ? 'red-heart' : ''}`} onClick={handleFavoriteClick}>
           <FontAwesomeIcon icon={faHeart} />
         </div>
-
         <div className='bottom-flex-write-journal'>
           <select className="mood-dropdown" name="mood" value={mood} onChange={(e) => setMood(e.target.value)}>
             <option value="" disabled hidden>
@@ -67,10 +67,23 @@ const WriteJournal = () => {
             <option value="motivated">Motivated</option>
             <option value="angry">Angry</option>
           </select>
-
-          <button className="send-button" type="submit">
-            Send
-          </button>
+          <div>
+            {isDashboard && (
+              <select className="journal-dropdown" name="journal" value={selectedJournal} onChange={(e) => setSelectedJournal(e.target.value)}>
+                <option value="" disabled hidden>
+                  Select a journal
+                </option>
+                {journals?.map((journal) => (
+                  <option key={journal._id} value={journal._id}>
+                    {journal.title}
+                  </option>
+                ))}
+              </select>
+            )}
+            <button className="send-button" type="submit">
+              Send
+            </button>
+          </div>
         </div>
       </form>
     </div>

@@ -31,8 +31,25 @@ apiService.getJournalData = (journalId) => {
     });
 };
 
-
 // add a journal
+apiService.addJournal = (newJournal) => {
+  return fetch(`${BASE_URL}/journal`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(newJournal)
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error('Error sending data:', error);
+    });
+} 
 
 // add a new entry to specific journal 
 apiService.addJournalEntry = (journalId, newEntry) => {
@@ -67,7 +84,6 @@ apiService.updateJournalEntry = (journalId, entryId, updatedData) => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      console.log(updatedData);
       return response.json();
     })
     .catch((error) => {
@@ -75,5 +91,90 @@ apiService.updateJournalEntry = (journalId, entryId, updatedData) => {
     });
 };
 
+apiService.updateJournal = (journalId, updatedJournal) => {
+  console.log(updatedJournal);
+  return fetch(`${BASE_URL}/updateJournal/${journalId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(updatedJournal),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error('Error updating journal:', error);
+    });
+};
+
+//update single journal entry
+apiService.updateSingleJournalEntry = (entryId, updatedEntry) => {
+  return fetch(`${BASE_URL}/entry/${entryId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(updatedEntry),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      console.log(updatedEntry);
+      return response.json();
+    })
+    .catch((error) => {
+      console.error('Error updating journal entry:', error);
+    });
+};
+
+apiService.getAllFavoriteEntries = () => {
+  return fetch(`${BASE_URL}/favorites`) 
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error('Error getting favorite entries:', error);
+      throw error;
+    });
+};
+
+apiService.deleteJournalEntry = (journalId, entryId) => {
+  return fetch(`${BASE_URL}/journal/${journalId}/entry/${entryId}`, {
+    method: 'DELETE',
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+    })
+    .catch((error) => {
+      console.error('Error deleting journal entry:', error);
+      throw error;
+    });
+};
+
+apiService.deleteJournal = (journalId) => {
+  console.log(journalId);
+  return fetch(`${BASE_URL}/deleteJournal/${journalId}`, {
+    method: 'DELETE',
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+    })
+    .catch((error) => {
+      console.error('Error deleting journal:', error);
+      throw error;
+    });
+};
 
 export default apiService;

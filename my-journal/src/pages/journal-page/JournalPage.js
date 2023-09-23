@@ -5,7 +5,7 @@ import './JournalPage.css'
 import WriteJournal from '../../components/write-journal/WriteJournal';
 import { useJournalContext } from '../../context';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const JournalPage = () => {
   const { journalData, updateJournalData } = useJournalContext();
@@ -26,21 +26,30 @@ const JournalPage = () => {
     };
     fetchJournalData();
   }, []);
-  
+
   const handleFavoriteClick = async (entryId) => {
     const entryToUpdate = entries.find(entry => entry._id === entryId);
     const newFavoriteState = !entryToUpdate.favorite;
     const response = await apiService.updateJournalEntry(journalId, entryId, { favorite: newFavoriteState });
     setEntries(response);
   };
-  
+
+  const handleDeleteClick = async (entryId) => {
+    try {
+      await apiService.deleteJournalEntry(journalId, entryId);
+      setEntries((prevEntries) => prevEntries.filter((entry) => entry._id !== entryId));
+    } catch (error) {
+      console.error('Error deleting journal entry:', error);
+    }
+  };
+
   return (
     <div>
       <div className='journal-page-header'>
         <div className='cover' style={{ backgroundColor: journalData.coverColor }}>
-          <p className='book-title'>{ journalData.title}</p>
+          <p className='book-title'>{journalData.title}</p>
         </div>
-        <WriteJournal />
+        <WriteJournal setEntries={ setEntries } />
       </div>
       {entries?.length > 0 ? (
         <div>
@@ -48,21 +57,29 @@ const JournalPage = () => {
             <div className='read-journal' key={entry._id}>
               <div className='journal-and-date'>
                 <p>{entry.content}</p>
-                <p>{entry.date}</p>
+                <p>{entry.created}</p>
               </div>
               <p>{entry.mood}</p>
               <div
-                className={`favorite-icon ${entry.favorite? 'red-heart' : ''}`}
+                className={`favorite-icon ${entry.favorite ? 'red-heart' : ''}`}
                 onClick={() => {
                   handleFavoriteClick(entry._id);
                 }}>
-                <FontAwesomeIcon icon={faHeart} /> 
+                <FontAwesomeIcon icon={faHeart} />
+              </div>
+              <div
+                className='trash-icon'
+                onClick={() => {
+                  handleDeleteClick(entry._id);
+                }}
+              >
+                <FontAwesomeIcon icon={faTrash} />
               </div>
             </div>
           ))}
         </div>
       ) : (
-        <p></p> 
+        <p></p>
       )}
     </div>
   )
