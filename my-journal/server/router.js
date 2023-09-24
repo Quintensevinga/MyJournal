@@ -23,6 +23,7 @@ router.put('/updateJournal/:journalId', controllers.updateJournal)
 
 // updating a journal entry
 router.put('/journal/:journalId/entry/:entryId', controllers.updateJournalEntry);
+
 //updating single journal entry
 router.put('/entry/:entryId', controllers.updateSingleJournalEntry);
 

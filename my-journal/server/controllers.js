@@ -9,7 +9,6 @@ const createJournal = async(ctx) => {
       coverColor
     })
 
-    console.log(journal);
     await journal.save();
 
     ctx.status = 201;
@@ -60,7 +59,6 @@ const getAllFavorites = async (ctx) => {
 
 const addJournalEntry = async (ctx) => {
   try {
-    console.log('test');
     const { journalId } = ctx.params;
     const { created, content, mood, favorite } = ctx.request.body;
 
@@ -74,7 +72,6 @@ const addJournalEntry = async (ctx) => {
     }
 
     journal.entries.push(journalEntry);
-    console.log(journal);
     await journal.save()
 
     ctx.status = 201; 
@@ -109,9 +106,7 @@ const updateJournalEntry = async (ctx) => {
 const updateSingleJournalEntry = async (ctx) => {
   try {
     const { entryId } = ctx.params;
-    console.log(entryId);
     const updatedData = ctx.request.body;
-    console.log(updatedData);
 
     const journals = await Journal.find();
 
@@ -125,9 +120,7 @@ const updateSingleJournalEntry = async (ctx) => {
         break;
       }
     }
-    console.log(entry);
     Object.assign(entry, updatedData);
-    console.log(entry);
     await journalToSave.save();
     ctx.status = 200;
     ctx.body = entry;
@@ -162,13 +155,6 @@ const deleteJournal = async (ctx) => {
 
     const journal = await Journal.findByIdAndRemove(journalId);
 
-    if (journal) {
-      ctx.status = 204;
-    } else {
-      ctx.status = 404;
-      ctx.body = { error: 'Journal not found' };
-    }
-
     ctx.status = 204;
   } catch (error) {
     ctx.status = 500;
@@ -183,19 +169,24 @@ const updateJournal = async (ctx) => {
 
     const journal = await Journal.findByIdAndUpdate(journalId, updatedData);
 
-    console.log(journal);
-    if (journal) {
-      ctx.status = 200;
-      ctx.body = journal;
-    } else {
-      ctx.status = 404;
-      ctx.body = { error: 'Journal not found' };
-    }
+    ctx.status = 200;
+    ctx.body = journal;
   } catch (error) {
     ctx.status = 500;
     ctx.body = { error: 'Error while updating journal' };
   }
 };
 
-module.exports = { createJournal, getAllJournals, getJournalData, getAllFavorites, addJournalEntry, updateJournalEntry, updateSingleJournalEntry, deleteJournalEntry, deleteJournal, updateJournal};
+module.exports = {
+  createJournal,
+  getAllJournals,
+  getJournalData,
+  getAllFavorites,
+  addJournalEntry,
+  updateJournalEntry,
+  updateSingleJournalEntry,
+  deleteJournalEntry,
+  deleteJournal,
+  updateJournal
+};
 
