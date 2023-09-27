@@ -1,17 +1,67 @@
+.journals-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.static-journal-title {
+  /* position: absolute;
+  left: 0;
+  right: 0; */
+  color: red;
+}
+
 .read-journal {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: rgb(236, 231, 231);
+  background-color: whitesmoke;
   height: 140px;
   width: 100%;
   border-radius: 5px;
   position: relative;
-  padding-top: 15px;
-  margin-bottom: 10px;
+  padding: 20px 35px;
+  margin-bottom: 30px;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
 }
 
-.favorite-icon {
+.read-journal p {
+  margin: 0;
+}
+
+.journal-and-date {
+  font-family: 'Georgia', serif;
+  max-width: 600px;
+}
+
+.entry-date {
+  padding-top: 5px;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.mood-box {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.mood {
+  border: 1px dotted black;
+  border-radius: 5px;
+  padding: 2px 5px;
+}
+
+.journal-text {
+  /* TODO: add a notepad img and adjust line height textarea etc */
+  width: 80%;
+  height: 130px;
+  line-height: 30px;
+  resize: none;
+  border: none;
+}
+
+.favorite-icon-entry {
   position: absolute;
   top: 2px;
   right: 2px;
@@ -20,7 +70,7 @@
   cursor: pointer;
 }
 
-.favorite-icon.red-heart {
+.favorite-icon-entry.red-heart {
   color: red;
 }
 

@@ -1,0 +1,9 @@
+.dashboard-content {
+  width: max-content;
+}
+
+.gall-quotes {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

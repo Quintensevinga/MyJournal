@@ -8,7 +8,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 const rootElement = document.getElementById('root');
 Modal.setAppElement(rootElement);
 
-const ModalAdjustJournal = ({ isOpen, closeModal, onSave, selectedJournal, setSelectedJournal }) => {
+const ModalAdjustJournal = ({ isOpen, closeModal, onSave, selectedJournal, setSelectedJournal, isJournalPage }) => {
   const [title, setTitle] = useState('');
   const [coverColor, setCoverColor] = useState('');
 
@@ -16,8 +16,8 @@ const ModalAdjustJournal = ({ isOpen, closeModal, onSave, selectedJournal, setSe
     if (selectedJournal) {
       setTitle(selectedJournal.title);
       setCoverColor(selectedJournal.coverColor);
-    } 
-  }, [selectedJournal]);
+    }
+  }, [isOpen]);
 
   const handleSaveClick = async () => {
     try {
@@ -34,7 +34,7 @@ const ModalAdjustJournal = ({ isOpen, closeModal, onSave, selectedJournal, setSe
       }
       closeModal();
       onSave();
-      setSelectedJournal('');
+      if (!isJournalPage) setSelectedJournal('');
     } catch (error) {
       console.error('Error', error);
     }
@@ -43,16 +43,16 @@ const ModalAdjustJournal = ({ isOpen, closeModal, onSave, selectedJournal, setSe
   const handleModalClose = () => {
     setTitle('');
     setCoverColor('');
-    setSelectedJournal('');
+    if (!isJournalPage) setSelectedJournal('');
     closeModal();
   };
 
   const handleDeleteClick = async (journalId) => {
     try {
-      console.log(journalId);
       await apiService.deleteJournal(journalId);
       onSave();
       handleModalClose();
+      if (isJournalPage) window.history.back();
     } catch (error) {
       console.error('Error', error);
     }
@@ -67,42 +67,51 @@ const ModalAdjustJournal = ({ isOpen, closeModal, onSave, selectedJournal, setSe
     'Orange',
     'Pink',
   ];
-  
-  return(
+
+  return (
     <Modal
       isOpen={isOpen}
       onRequestClose={handleModalClose}
       className='modal-content'
       contentLabel="adjust journal specifics"
     >
-      <form>
-        <input
-          value={title}  
-          type="text"
-          placeholder={title ? title : "What's the title?"}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <select name="color" value={coverColor || ''} onChange={(e) => setCoverColor(e.target.value)}>
-          <option value="" disabled hidden>
-            What cover color?
-          </option>
-          {colorOptions.map((color) => (
-            <option key={color} value={color}>
-              {color}
-            </option>
-          ))}
-        </select>
-        <button type="button" onClick={handleModalClose}>Cancel</button>
-        <button type="button" onClick={handleSaveClick}>Save</button>
-      </form>
-      {selectedJournal && (
-        <div
-          className="delete-journal"
-          onClick={() => handleDeleteClick(selectedJournal._id)}
-        >
-          <FontAwesomeIcon icon={faTrash} />
+      <div className="modal-box">
+        <div className="form-container">
+          <form>
+            <input
+              className="input-journal-title"
+              value={title}
+              type="text"
+              placeholder={title ? title : "What's the title?"}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <select className="input-covercolor" name="color" value={coverColor || ''} onChange={(e) => setCoverColor(e.target.value)}>
+              <option value="" disabled hidden>
+                What cover color?
+              </option>
+              {colorOptions.map((color) => (
+                <option key={color} value={color}>
+                  {color}
+                </option>
+              ))}
+            </select>
+            <div className="button-container">
+              <button type="button" onClick={handleModalClose}>Cancel</button>
+              <button type="button" onClick={handleSaveClick}>Save</button>
+            </div>
+          </form>
+          {selectedJournal && (
+            <div
+              className="delete-journal"
+              onClick={() => handleDeleteClick(selectedJournal._id)}
+            >
+              <FontAwesomeIcon icon={faTrash} />
+            </div>
+          )}
         </div>
-      )}
+
+      </div>
+
     </Modal>
   )
 }

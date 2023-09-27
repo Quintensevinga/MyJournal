@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import apiService from '../../apiService';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import ReadJournal from '../../components/read-journal/ReadJournal';
+import './favorites.css'
 
 const Favorites = () => {
   const [favoriteEntries, setFavoriteEntries] = useState([]);
@@ -33,30 +33,9 @@ const Favorites = () => {
   };
 
   return (
-    <div>
-      <p>All your favorite journal entries</p>
-      {favoriteEntries?.length > 0 ? (
-        <div>
-          {favoriteEntries.map((entry) => (
-            <div className='read-journal' key={entry._id}>
-              <div className='journal-and-date'>
-                <p>{entry.content}</p>
-                <p>{entry.created}</p>
-              </div>
-              <p>{entry.mood}</p>
-              <div
-                className={`favorite-icon ${entry.favorite ? 'red-heart' : ''}`}
-                onClick={() => {
-                  handleFavoriteClick(entry._id);
-                }}>
-                <FontAwesomeIcon icon={faHeart} />
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <p>No favorite entries to display.</p>
-      )}
+    <div className='favorites-content'>
+      <p className='favorites-header'>All your favorite journal entries...</p>
+      <ReadJournal isFavoritesPage={true} favoriteEntries={favoriteEntries} handleFavoriteToggle={ handleFavoriteClick } />
     </div>
   );
 };

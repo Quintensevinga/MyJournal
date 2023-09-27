@@ -37,19 +37,20 @@ const JournalGallery = () => {
     };
     setSelectedJournal(clickedJournal)
     setIsModalOpen(true);
+    console.log(clickedJournal);
   }
 
   return (
     <div className='gallery-box'>
       {journals.map((journal) => (
-        <Link  to={`/my-journals/${journal._id}`} key={journal._id}>
+        <Link  to={`/my-journals/${journal._id}`} key={journal._id} className='menu-link'>
           <div className='journal-box'>
             <div className='journal-cover' style={{ backgroundColor: journal.coverColor || 'black' }}>
               <div className='adjust-icon'>
                 <FontAwesomeIcon icon={faEllipsisV} onClick={(event) => handleAdjustClick(event, journal)} />
               </div>
             </div>
-            <p>{journal.title}</p>
+            <p className='journal-title-journalpage'>{journal.title}</p>
           </div>
         </Link>
       ))}
@@ -57,7 +58,7 @@ const JournalGallery = () => {
         <div className='journal-cover' style={{border: '1px solid black'}}>
           <p className='plus-sign'>+</p>
         </div>
-        <p>Add journal</p>
+        <p className='add-journal-text'>Add journal</p>
       </div>
       <ModalAdjustJournal
         isOpen={isModalOpen}
@@ -65,6 +66,7 @@ const JournalGallery = () => {
         onSave={fetchJournals}
         selectedJournal={selectedJournal}
         setSelectedJournal={setSelectedJournal}
+        isJournalGallery={true}
         />
     </div>
   );

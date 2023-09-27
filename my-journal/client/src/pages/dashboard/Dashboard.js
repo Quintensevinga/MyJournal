@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import './Dashboard.css'
 import WriteJournal from '../../components/write-journal/WriteJournal';
 import apiService from '../../apiService';
+import DashboardJournalGallery from '../../components/dashboard-journal-gallery/dashboardJournalGallery';
+import SomeFavorites from '../../components/some-favorites/someFavorites';
+import Randomquotes from '../../components/random-quotes/Randomquotes';
 
 const Dashboard = () => {
   const [journals, setJournals] = useState([]);
@@ -20,7 +24,12 @@ const Dashboard = () => {
   return (
     <div>
       <WriteJournal isDashboard={true} journals={journals} />
-      {/* Add additional features later */}
+      <div className='gall-quotes'>
+        <DashboardJournalGallery journals={journals} />
+        <Randomquotes />
+      </div>
+
+      <SomeFavorites />
     </div>
   );
 }
