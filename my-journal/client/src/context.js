@@ -1,4 +1,3 @@
-// JournalContext.js
 import React, { createContext, useState, useContext } from 'react';
 
 const MyJournalContext = createContext();
