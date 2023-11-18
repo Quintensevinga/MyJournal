@@ -16,7 +16,6 @@ apiService.getAllJournals = () => {
     });
 };
 
-// get specific journal
 apiService.getJournalData = (journalId) => {
   return fetch(`${BASE_URL}/journal/${journalId}`)
     .then((response) => {
@@ -31,7 +30,6 @@ apiService.getJournalData = (journalId) => {
     });
 };
 
-// add a journal
 apiService.addJournal = (newJournal) => {
   return fetch(`${BASE_URL}/journal`, {
     method: 'POST',
@@ -51,7 +49,6 @@ apiService.addJournal = (newJournal) => {
     });
 } 
 
-// add a new entry to specific journal 
 apiService.addJournalEntry = (journalId, newEntry) => {
   return fetch(`${BASE_URL}/journalEntry/${journalId}`, {
     method: 'POST',
@@ -71,7 +68,6 @@ apiService.addJournalEntry = (journalId, newEntry) => {
     });
 }
 
-// update a journal entry
 apiService.updateJournalEntry = (journalId, entryId, updatedData) => {
   return fetch(`${BASE_URL}/journal/${journalId}/entry/${entryId}`, {
     method: 'PUT',
@@ -111,7 +107,6 @@ apiService.updateJournal = (journalId, updatedJournal) => {
     });
 };
 
-//update single journal entry
 apiService.updateSingleJournalEntry = (entryId, updatedEntry) => {
   return fetch(`${BASE_URL}/entry/${entryId}`, {
     method: 'PUT',
