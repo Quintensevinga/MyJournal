@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import writeJournalSlice from './slices/writeJournalSlice';
 import journalGallerySlice from './slices/journalGallerySlice';
+import readJournalSlice from './slices/readJournalSlice';
 
 const store = configureStore({
   reducer: {
     writeJournal: writeJournalSlice,
-    journalGallery: journalGallerySlice
+    journalGallery: journalGallerySlice,
+    readJournal: readJournalSlice,
   },
 });
 

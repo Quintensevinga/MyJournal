@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import './ReadJournal.css';
 import apiService from '../../apiService';
-import { useJournalContext } from '../../context';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faTrash } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
+import { setEntries, addEntry, updateEntry, deleteEntry } from '../../redux/slices/readJournalSlice'
 
-const ReadJournal = ({ isFavoritesPage, favoriteEntries, handleFavoriteToggle, isJournalPage, someFavEntry, journalData }) => {
-  const { updateJournalData } = useJournalContext();
-  const [entries, setEntries] = useState([]);
+const ReadJournal = ({ isFavoritesPage, favoriteEntries, handleFavoriteToggle, isJournalPage, someFavEntry }) => {
+  const dispatch = useDispatch();
+  const { entries } = useSelector((state) => state.journal);
+
   const params = useParams();
   const journalId = params.journalId;
 
@@ -26,8 +28,7 @@ const ReadJournal = ({ isFavoritesPage, favoriteEntries, handleFavoriteToggle, i
       try {
         if (isJournalPage) {
           const data = await apiService.getJournalData(journalId);
-          updateJournalData(data);
-          setEntries(sortEntriesByDate(data.entries));
+          dispatchEvent(setEntries(sortEntriesByDate(data.entries)));
         } else {
           return;
         }
@@ -36,7 +37,7 @@ const ReadJournal = ({ isFavoritesPage, favoriteEntries, handleFavoriteToggle, i
       }
     };
     fetchJournalData();
-  }, [journalId, favoriteEntries, journalData]);
+  });
 
 
 
@@ -47,8 +48,7 @@ const ReadJournal = ({ isFavoritesPage, favoriteEntries, handleFavoriteToggle, i
       const response = await apiService.updateJournalEntry(journalId, entryId, {
         favorite: newFavoriteState,
       });
-      setEntries(response);
-    }
+      dispatch(setEntries(response));    }
     if (isFavoritesPage) {
       handleFavoriteToggle(entryId);
     } 
@@ -57,7 +57,7 @@ const ReadJournal = ({ isFavoritesPage, favoriteEntries, handleFavoriteToggle, i
   const handleDeleteClick = async (entryId) => {
     try {
       await apiService.deleteJournalEntry(journalId, entryId);
-      setEntries((prevEntries) => prevEntries.filter((entry) => entry._id !== entryId));
+      dispatch(deleteEntry(entryId));
     } catch (error) {
       console.error('Error deleting journal entry:', error);
     }
