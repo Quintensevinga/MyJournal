@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import './JournalGallery.css';
 import apiService from '../../apiService';
 import ModalAdjustJournal from '../modal-adjust-journal/ModalAdjustJournal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import { setJournals, setSelectedJournal, toggleModal } from '../../redux/slices/journalGallerySlice';
+
 
 const JournalGallery = () => {
-  const [journals, setJournals] = useState([]);
-  const [selectedJournal, setSelectedJournal] = useState();
-  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const dispatch = useDispatch();
+  const { journals, selectedJournal, isModalOpen } = useSelector((state) => state.journalGallery);
 
   useEffect(() => {
     fetchJournals();
@@ -18,15 +20,14 @@ const JournalGallery = () => {
   const fetchJournals = async () => {
     try {
       const data = await apiService.getAllJournals();
-      setJournals(data);
-      console.log(data);
+      dispatch(setJournals(data));
     } catch (error) {
       console.error('Error:', error);
     }
   };
 
   const handleAddJournalClick = () => {
-    setIsModalOpen(true);
+    dispatch(toggleModal());
   }
 
   const handleAdjustClick = (event, journal) => {
@@ -36,9 +37,8 @@ const JournalGallery = () => {
       title: journal.title,
       coverColor: journal.coverColor,
     };
-    setSelectedJournal(clickedJournal)
-    setIsModalOpen(true);
-    console.log(clickedJournal);
+    dispatch(setSelectedJournal(clickedJournal));
+    dispatch(toggleModal());
   }
 
   return (
@@ -63,7 +63,7 @@ const JournalGallery = () => {
       </div>
       <ModalAdjustJournal
         isOpen={isModalOpen}
-        closeModal={() => setIsModalOpen(false)}
+        closeModal={() => dispatch(toggleModal())}
         onSave={fetchJournals}
         selectedJournal={selectedJournal}
         setSelectedJournal={setSelectedJournal}
