@@ -7,14 +7,22 @@ import './WriteJournal.css';
 import { useJournalContext } from '../../context';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faPaperPlane, faCalendar } from '@fortawesome/free-solid-svg-icons';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  updateSelectedDate,
+  updateContent,
+  updateMood,
+  toggleFavorite,
+  updateSelectedJournal,
+  resetWriteJournal,
+} from '../../redux/slices/writeJournalSlice';
 
 const WriteJournal = ({ isDashboard, journals }) => {
+  const dispatch = useDispatch();
+  const writeJournalState = useSelector((state) => state.writeJournal);
+
   const { updateJournalData } = useJournalContext();
 
-  const [selectedDate, setSelectedDate] = useState(Date.now());
-  const [content, setContent] = useState('');
-  const [mood, setMood] = useState('');
-  const [favorite, setFavorite] = useState(false);
   const [selectedJournal, setSelectedJournal] = useState('');
 
   const params = useParams();
@@ -24,25 +32,22 @@ const WriteJournal = ({ isDashboard, journals }) => {
     e.preventDefault();
     try {
       const newEntry = {
-        created: selectedDate,
-        content: content,
-        mood,
-        favorite,
+        created: writeJournalState.selectedDate,
+        content: writeJournalState.content,
+        mood: writeJournalState.mood,
+        favorite: writeJournalState.favorite,
       };
       const response = await apiService.addJournalEntry(selectedJournal || journalId, newEntry);
       console.log(response);
       updateJournalData(response);
-      setContent('');
-      setMood('');
-      setFavorite(false);
-      setSelectedJournal('');
+      dispatch(resetWriteJournal());
     } catch (error) {
       console.error('Error:', error);
     }
   };
 
   const handleFavoriteClick = () => {
-    setFavorite(!favorite);
+    dispatch(toggleFavorite());
   };
 
   const datePickerRef = useRef(); 
@@ -60,14 +65,14 @@ const WriteJournal = ({ isDashboard, journals }) => {
           className="journal-text"
           name="journalEntry"
           placeholder="Hey Quinten what's on your mind? Type it here... "
-          value={content}
-          onChange={((e) => setContent(e.target.value))}
-        ></textarea>
-        <div className={`favorite-icon ${favorite ? 'red-heart' : ''}`} onClick={handleFavoriteClick}>
+          value={writeJournalState.content}
+          onChange={((e) => dispatch(updateContent(e.target.value)))}>  
+        </textarea>
+        <div className={`favorite-icon ${writeJournalState.favorite ? 'red-heart' : ''}`} onClick={handleFavoriteClick}>
           <FontAwesomeIcon icon={faHeart} />
         </div>
         <div className='bottom-flex-write-journal'>
-          <select className="mood-dropdown" name="mood" value={mood} onChange={(e) => setMood(e.target.value)}>
+          <select className="mood-dropdown" name="mood" value={writeJournalState.mood} onChange={(e) => dispatch(updateMood(e.target.value))}>
             <option value="" disabled hidden>
               What's your mood?
             </option>
@@ -86,8 +91,8 @@ const WriteJournal = ({ isDashboard, journals }) => {
                 onClick={openDatePicker}
               />
               <DatePicker
-                selected={selectedDate}
-                onChange={(date) => setSelectedDate(date)}
+                selected={writeJournalState.selectedDate}
+                onChange={(date) => dispatch(updateSelectedDate(date))}
                 dateFormat="MMMM d, yyyy"
                 className="date-picker"
                 ref={datePickerRef}

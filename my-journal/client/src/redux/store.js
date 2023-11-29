@@ -1,7 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
+import writeJournalSlice from './slices/writeJournalSlice';
 
 const store = configureStore({
-  reducer: {},
+  reducer: {
+    writeJournal: writeJournalSlice,
+  },
 });
 
 export const RootState = store.getState;
