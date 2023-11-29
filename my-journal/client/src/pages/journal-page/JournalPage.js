@@ -24,6 +24,7 @@ const JournalPage = () => {
     try {
       const data = await apiService.getJournalData(journalId);
       updateJournalData(data);
+      console.log(data);
     } catch (error) {
       console.error('Error fetching journal entries:', error);
     }

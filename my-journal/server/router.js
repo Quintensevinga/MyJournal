@@ -1,22 +1,22 @@
 const Router = require('koa-router');
 const controllers = require('./controllers/controllers');
-const authenticate = require('./middleware/authMiddleware');
+const authControllers = require('./controllers/authControllers');
+const {authenticate} = require('./middleware/authMiddleware');
 
 const router = new Router();
 
-router.post('/api/register', controllers.register);
-router.post('/api/login', controllers.login);
+router.post('/register', authControllers.register);
+router.post('/login', authControllers.login);
 
-router.use(authenticate);
-router.post('/journal', controllers.createJournal);
-router.get('/journals', controllers.getAllJournals);
-router.get('/journal/:journalId', controllers.getJournalData);
-router.get('/favorites', controllers.getAllFavorites);
-router.post('/journalEntry/:journalId', controllers.addJournalEntry);
-router.put('/updateJournal/:journalId', controllers.updateJournal)
-router.put('/journal/:journalId/entry/:entryId', controllers.updateJournalEntry);
-router.put('/entry/:entryId', controllers.updateSingleJournalEntry);
-router.delete('/journal/:journalId/entry/:entryId', controllers.deleteJournalEntry);
-router.delete('/deleteJournal/:journalId', controllers.deleteJournal)
+router.post('/journal', authenticate, controllers.createJournal);
+router.get('/journals', authenticate, controllers.getAllJournals);
+router.get('/journal/:journalId', authenticate, controllers.getJournalData);
+router.get('/favorites', authenticate, controllers.getAllFavorites);
+router.post('/journalEntry/:journalId', authenticate, controllers.addJournalEntry);
+router.put('/updateJournal/:journalId', authenticate, controllers.updateJournal)
+router.put('/journal/:journalId/entry/:entryId', authenticate, controllers.updateJournalEntry);
+router.put('/entry/:entryId', authenticate, controllers.updateSingleJournalEntry);
+router.delete('/journal/:journalId/entry/:entryId', authenticate, controllers.deleteJournalEntry);
+router.delete('/deleteJournal/:journalId', authenticate, controllers.deleteJournal)
 
 module.exports = router;

@@ -10,12 +10,16 @@ const authenticate = async (ctx, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, 'my-secret-key'); 
+    const tokenWithoutBearer = token.replace(/^Bearer\s/, '');
+
+    const decoded = jwt.verify(tokenWithoutBearer, 'my-secret-key'); 
 
     ctx.state.user = decoded;
 
     await next();
   } catch (error) {
+    console.error('Error verifying token:', error);
+
     ctx.status = 401;
     ctx.body = { error: 'Unauthorized - Invalid Token' };
   }

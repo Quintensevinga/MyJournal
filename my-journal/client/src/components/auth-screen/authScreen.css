@@ -1,0 +1,33 @@
+.container {
+  margin-top: 10%;
+  display: flex;
+  justify-content: center;
+}
+
+.box {
+  background: whitesmoke;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  padding: 0 30px;
+  border-radius: 11px;
+}
+
+.input-fields {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+.input-item {
+  border-radius: 11px;
+  padding: 8px 10px;
+  margin: 10px 0;
+  border: none;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+}
+
+.redirect-btn {
+  border: none;
+  background-color: transparent;
+  color: blue;
+  margin: 0 50px;
+}

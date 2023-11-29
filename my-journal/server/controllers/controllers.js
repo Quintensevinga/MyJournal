@@ -3,8 +3,9 @@ const { User, Journal } = require('../model');
 const createJournal = async (ctx) => {
   try {
     const { title, coverColor } = ctx.request.body;
+    console.log(ctx.request.body);
 
-    const userId = ctx.state.user._id;
+    const userId = ctx.state.user.userId;
 
     const journal = new Journal({
       user: userId,
@@ -26,10 +27,13 @@ const createJournal = async (ctx) => {
 
 const getAllJournals = async (ctx) => {
   try {
-    const userId = ctx.state.user._id;
+    const userId = ctx.state.user.userId;
+    console.log(userId);
 
     const user = await User.findById(userId).populate('journals');
+    console.log(user);
     const journals = user.journals;
+    console.log(journals);
 
     ctx.body = journals;
   } catch (error) {
@@ -40,7 +44,7 @@ const getAllJournals = async (ctx) => {
 
 const getJournalData = async (ctx) => {
   try {
-    const userId = ctx.state.user._id;
+    const userId = ctx.state.user.userId;
     const { journalId } = ctx.params;
 
     const journal = await Journal.findOne({ _id: journalId, user: userId });
@@ -60,8 +64,7 @@ const getJournalData = async (ctx) => {
 
 const getAllFavorites = async (ctx) => {
   try {
-    const userId = ctx.state.user._id;
-
+    const userId = ctx.state.user.userId;
     const journals = await Journal.find({ user: userId });
 
     const favoriteEntries = journals.reduce((acc, journal) => {
@@ -78,7 +81,7 @@ const getAllFavorites = async (ctx) => {
 
 const addJournalEntry = async (ctx) => {
   try {
-    const userId = ctx.state.user._id;
+    const userId = ctx.state.user.userId;
     const { journalId } = ctx.params;
     const { created, content, mood, favorite } = ctx.request.body;
 
@@ -97,6 +100,8 @@ const addJournalEntry = async (ctx) => {
       favorite
     };
 
+    console.log(journalEntry);
+
     journal.entries.push(journalEntry);
     await journal.save();
 
@@ -110,7 +115,7 @@ const addJournalEntry = async (ctx) => {
 
 const updateJournalEntry = async (ctx) => {
   try {
-    const userId = ctx.state.user._id;
+    const userId = ctx.state.user.userId;
     const { journalId, entryId } = ctx.params;
 
     const journal = await Journal.findOne({ _id: journalId, user: userId });
@@ -143,7 +148,7 @@ const updateJournalEntry = async (ctx) => {
 
 const updateSingleJournalEntry = async (ctx) => {
   try {
-    const userId = ctx.state.user._id;
+    const userId = ctx.state.user.userId;
     const { entryId } = ctx.params;
 
     const journals = await Journal.find({ user: userId });
@@ -180,7 +185,7 @@ const updateSingleJournalEntry = async (ctx) => {
 
 const deleteJournalEntry = async (ctx) => {
   try {
-    const userId = ctx.state.user._id;
+    const userId = ctx.state.user.userId;
     const { journalId, entryId } = ctx.params;
 
     const journal = await Journal.findOne({ _id: journalId, user: userId });
@@ -211,7 +216,7 @@ const deleteJournalEntry = async (ctx) => {
 
 const deleteJournal = async (ctx) => {
   try {
-    const userId = ctx.state.user._id;
+    const userId = ctx.state.user.userId;
     const { journalId } = ctx.params;
 
     const journal = await Journal.findOneAndRemove({ _id: journalId, user: userId });
@@ -231,7 +236,7 @@ const deleteJournal = async (ctx) => {
 
 const updateJournal = async (ctx) => {
   try {
-    const userId = ctx.state.user._id;
+    const userId = ctx.state.user.userId;
     const { journalId } = ctx.params;
 
     const journal = await Journal.findOne({ _id: journalId, user: userId });

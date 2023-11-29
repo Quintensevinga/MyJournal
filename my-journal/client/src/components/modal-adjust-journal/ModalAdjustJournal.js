@@ -29,6 +29,7 @@ const ModalAdjustJournal = ({ isOpen, closeModal, onSave, selectedJournal, setSe
         await apiService.updateJournal(selectedJournal._id, newJournal);
       } else {
         await apiService.addJournal(newJournal);
+        console.log('heellllo');
         setCoverColor('');
         setTitle('');
       }

@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const MyJournalContext = createContext();
 
@@ -18,8 +18,9 @@ export const ContextProvider = ({ children }) => {
     }));
   };
 
+
   return (
-    <MyJournalContext.Provider value={{ journalData, updateJournalData, addToEntries }}>
+    <MyJournalContext.Provider value={{ journalData, updateJournalData, addToEntries}}>
       {children}
     </MyJournalContext.Provider>
   );

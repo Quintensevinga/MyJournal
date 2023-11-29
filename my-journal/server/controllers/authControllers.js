@@ -1,10 +1,13 @@
-const User = require('../models').User;
+const User = require('../model').User;
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
-const authController = {
-  register: async (ctx) => {
+const register = async (ctx) => {
     try {
       const { username, password } = ctx.request.body;
+      console.log(username);
+      console.log(password);
 
       const existingUser = await User.findOne({ username });
 
@@ -14,24 +17,30 @@ const authController = {
         return;
       }
 
-      const newUser = new User({ username, password });
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+      const newUser = new User({ username, password: hashedPassword });
       await newUser.save();
 
+      const token = jwt.sign({ userId: newUser._id, username: newUser.username }, 'my-secret-key', {
+        expiresIn: '1d',
+      });
+
       ctx.status = 200;
-      ctx.body = { message: 'User registered successfully' };
+      ctx.body = { token };
     } catch (error) {
       ctx.status = 500;
       ctx.body = { error: 'Internal Server Error' };
     }
-  },
+  }
 
-  login: async (ctx) => {
+  const login = async (ctx) => {
     try {
       const { username, password } = ctx.request.body;
 
       const user = await User.findOne({ username });
 
-      if (!user || !user.comparePassword(password)) {
+      if (!user || user.password !== password) if (!user || !(await bcrypt.compare(password, user.password))) {
         ctx.status = 401;
         ctx.body = { error: 'Invalid username or password' };
         return;
@@ -41,13 +50,13 @@ const authController = {
         expiresIn: '1d', 
       });
 
+      console.log(token);
       ctx.status = 200;
       ctx.body = { token };
     } catch (error) {
       ctx.status = 500;
       ctx.body = { error: 'Internal Server Error' };
     }
-  },
-};
+  }
 
-module.exports = authController;
+module.exports = { register, login };

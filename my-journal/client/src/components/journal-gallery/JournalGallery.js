@@ -19,6 +19,7 @@ const JournalGallery = () => {
     try {
       const data = await apiService.getAllJournals();
       setJournals(data);
+      console.log(data);
     } catch (error) {
       console.error('Error:', error);
     }
