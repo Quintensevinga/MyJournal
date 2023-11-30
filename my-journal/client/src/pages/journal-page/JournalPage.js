@@ -46,7 +46,7 @@ const JournalPage = () => {
         </div>
         <WriteJournal journalEntries={journalData.entries} />
       </div>
-      <ReadJournal isJournalPage={true} journalData={ journalData} />
+      <ReadJournal isJournalPage={true} journalData={journalData} />
       <ModalAdjustJournal 
         isOpen={isModalOpen}
         closeModal={() => handleAdjustClick()}
