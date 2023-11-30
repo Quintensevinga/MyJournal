@@ -83,11 +83,9 @@ const addJournalEntry = async (ctx) => {
   try {
     const userId = ctx.state.user.userId;
     const { journalId } = ctx.params;
-    console.log(journalId);
     const { created, content, mood, favorite } = ctx.request.body;
-
     const journal = await Journal.findOne({ _id: journalId, user: userId });
-    console.log('Before:', journal);
+    
     if (!journal) {
       ctx.status = 404;
       ctx.body = { error: 'Journal not found' };
@@ -101,15 +99,12 @@ const addJournalEntry = async (ctx) => {
       favorite
     };
 
-    console.log(journalEntry);
-
     journal.entries.push(journalEntry);
-    console.log('After:', journal);
 
     await journal.save();
     
     ctx.status = 201;
-    ctx.body = journal;
+    ctx.body = journalEntry;
   } catch (error) {
     ctx.status = 500;
     ctx.body = { error: 'Error while adding a new journal entry' };

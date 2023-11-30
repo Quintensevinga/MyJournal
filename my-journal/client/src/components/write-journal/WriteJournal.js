@@ -14,6 +14,7 @@ import {
   toggleFavorite,
   resetWriteJournal,
 } from '../../redux/slices/writeJournalSlice';
+import { addEntry } from '../../redux/slices/readJournalSlice';
 
 const WriteJournal = ({ isDashboard, journals }) => {
   const dispatch = useDispatch();
@@ -35,6 +36,7 @@ const WriteJournal = ({ isDashboard, journals }) => {
       };
       const response = await apiService.addJournalEntry(selectedJournal || journalId, newEntry);
       console.log(response);
+      dispatch(addEntry(response));
       dispatch(resetWriteJournal());
     } catch (error) {
       console.error('Error:', error);

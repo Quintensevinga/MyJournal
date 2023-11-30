@@ -4,6 +4,14 @@ const initialState = {
   entries: [],
 };
 
+const sortEntriesByDate = (entries) => {
+  return entries.slice().sort((a, b) => {
+    const dateA = new Date(a.created);
+    const dateB = new Date(b.created);
+    return dateB - dateA;
+  });
+};
+
 const journalSlice = createSlice({
   name: 'journal',
   initialState,
@@ -13,6 +21,7 @@ const journalSlice = createSlice({
     },
     addEntry: (state, action) => {
       state.entries.push(action.payload);
+      state.entries = sortEntriesByDate(state.entries);
     },
     updateEntry: (state, action) => {
       const { entryId, updatedEntry } = action.payload;
