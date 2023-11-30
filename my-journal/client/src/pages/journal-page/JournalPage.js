@@ -1,37 +1,38 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import apiService from '../../apiService';
 import './JournalPage.css'
 import WriteJournal from '../../components/write-journal/WriteJournal';
-import { useJournalContext } from '../../context';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import ModalAdjustJournal from '../../components/modal-adjust-journal/ModalAdjustJournal'
 import ReadJournal from '../../components/read-journal/ReadJournal';
+import { setJournalData, toggleModal } from '../../redux/slices/journalPageSlice'; 
+
 
 const JournalPage = () => {
-  const { journalData, updateJournalData } = useJournalContext();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const dispatch = useDispatch();
+  const { journalData, isModalOpen } = useSelector((state) => state.journalPage);
 
   const params = useParams();
   const journalId = params.journalId;
 
   useEffect(() => {
     fetchJournalData();
-  }, []);
+  });
 
   const fetchJournalData = async () => {
     try {
       const data = await apiService.getJournalData(journalId);
-      updateJournalData(data);
-      console.log(data);
+      dispatch(setJournalData(data));
     } catch (error) {
       console.error('Error fetching journal entries:', error);
     }
   };
 
   const handleAdjustClick = () => {
-    setIsModalOpen(true);
+    dispatch(toggleModal());
   }
 
   return (
@@ -48,7 +49,7 @@ const JournalPage = () => {
       <ReadJournal isJournalPage={true} journalData={ journalData} />
       <ModalAdjustJournal 
         isOpen={isModalOpen}
-        closeModal={() => setIsModalOpen(false)}
+        closeModal={() => handleAdjustClick()}
         onSave={fetchJournalData}
         selectedJournal={journalData}
         isJournalPage={true}

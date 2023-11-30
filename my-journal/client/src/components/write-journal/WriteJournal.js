@@ -4,7 +4,6 @@ import apiService from '../../apiService';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './WriteJournal.css';
-import { useJournalContext } from '../../context';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faPaperPlane, faCalendar } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,15 +12,12 @@ import {
   updateContent,
   updateMood,
   toggleFavorite,
-  updateSelectedJournal,
   resetWriteJournal,
 } from '../../redux/slices/writeJournalSlice';
 
 const WriteJournal = ({ isDashboard, journals }) => {
   const dispatch = useDispatch();
   const writeJournalState = useSelector((state) => state.writeJournal);
-
-  const { updateJournalData } = useJournalContext();
 
   const [selectedJournal, setSelectedJournal] = useState('');
 
@@ -39,7 +35,6 @@ const WriteJournal = ({ isDashboard, journals }) => {
       };
       const response = await apiService.addJournalEntry(selectedJournal || journalId, newEntry);
       console.log(response);
-      updateJournalData(response);
       dispatch(resetWriteJournal());
     } catch (error) {
       console.error('Error:', error);

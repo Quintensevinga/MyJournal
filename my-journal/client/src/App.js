@@ -7,13 +7,11 @@ import Dashboard from './pages/dashboard/Dashboard';
 import MyJournals from './pages/my-journals/MyJournals';
 import Favorites from "./pages/favorites/Favorites";
 import JournalPage from "./pages/journal-page/JournalPage";
-import { ContextProvider } from "./context";
 import AuthComponent from "./components/auth-screen/authScreen";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   return (
-    <ContextProvider>
       <BrowserRouter>
           <div className="App">
             {isAuthenticated ? (
@@ -34,7 +32,6 @@ function App() {
             )}
           </div>
       </BrowserRouter>
-    </ContextProvider>
   );
 }
 

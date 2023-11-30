@@ -6,7 +6,7 @@ import apiService from '../../apiService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faTrash } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
-import { setEntries, addEntry, updateEntry, deleteEntry } from '../../redux/slices/readJournalSlice'
+import { setEntries, deleteEntry } from '../../redux/slices/readJournalSlice';
 
 const ReadJournal = ({ isFavoritesPage, favoriteEntries, handleFavoriteToggle, isJournalPage, someFavEntry }) => {
   const dispatch = useDispatch();
@@ -28,7 +28,7 @@ const ReadJournal = ({ isFavoritesPage, favoriteEntries, handleFavoriteToggle, i
       try {
         if (isJournalPage) {
           const data = await apiService.getJournalData(journalId);
-          dispatchEvent(setEntries(sortEntriesByDate(data.entries)));
+          dispatch(setEntries(sortEntriesByDate(data.entries)));
         } else {
           return;
         }
@@ -37,9 +37,7 @@ const ReadJournal = ({ isFavoritesPage, favoriteEntries, handleFavoriteToggle, i
       }
     };
     fetchJournalData();
-  });
-
-
+  }, [dispatch, isJournalPage, journalId]);
 
   const handleFavoriteClick = async (entryId) => {
     if (isJournalPage) {
@@ -48,7 +46,8 @@ const ReadJournal = ({ isFavoritesPage, favoriteEntries, handleFavoriteToggle, i
       const response = await apiService.updateJournalEntry(journalId, entryId, {
         favorite: newFavoriteState,
       });
-      dispatch(setEntries(response));    }
+      dispatch(setEntries(response));
+    }
     if (isFavoritesPage) {
       handleFavoriteToggle(entryId);
     } 
@@ -62,7 +61,6 @@ const ReadJournal = ({ isFavoritesPage, favoriteEntries, handleFavoriteToggle, i
       console.error('Error deleting journal entry:', error);
     }
   };
-
 
   return (
     <div>
@@ -105,7 +103,7 @@ const ReadJournal = ({ isFavoritesPage, favoriteEntries, handleFavoriteToggle, i
               </div>
             ))
           ) : (
-            <p></p>
+            <p>No entries available.</p>
           )
         ) : entries?.length > 0 ? (
           entries.map((entry) => (
@@ -138,7 +136,7 @@ const ReadJournal = ({ isFavoritesPage, favoriteEntries, handleFavoriteToggle, i
             </div>
           ))
         ) : (
-          <p></p>
+          <p>No entries available.</p>
         )}
       </div>
     </div>
